@@ -56,3 +56,13 @@ func (a *App) DownloadVideo(url string) {
 		panic(err)
 	}
 }
+
+func (a *App) GetVideoInfo(url string) youtube.FormatList {
+	client := youtube.Client{}
+
+	video, err := client.GetVideo(url)
+	if err != nil {
+		return nil
+	}
+	return video.Formats
+}

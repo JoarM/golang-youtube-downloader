@@ -17,7 +17,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "myproject",
+		Title:  "Youtube downloader",
 		Width:  400,
 		Height: 500,
 		AssetServer: &assetserver.Options{
