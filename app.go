@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/kkdai/youtube/v2"
 )
@@ -30,29 +31,74 @@ func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
-func (a *App) DownloadVideo(url string) {
+func (a *App) DownloadVideo(url string, filename string) string {
 	client := youtube.Client{}
 
 	video, err := client.GetVideo(url)
 	if err != nil {
-		panic(err)
+		return ""
 	}
 
 	formats := video.Formats.WithAudioChannels() // only get videos with audio
 	stream, _, err := client.GetStream(video, &formats[0])
 	if err != nil {
-		panic(err)
+		return ""
 	}
 	defer stream.Close()
 
-	file, err := os.Create("downloads/video.mp4")
+	basepath, err := os.UserHomeDir()
 	if err != nil {
-		panic(err)
+		return ""
+	}
+
+	filepath := filepath.Join(basepath, "Downloads", filename+".mp4")
+
+	file, err := os.Create(filepath)
+	if err != nil {
+		return ""
 	}
 	defer file.Close()
 
 	_, err = io.Copy(file, stream)
 	if err != nil {
-		panic(err)
+		return ""
 	}
+
+	return "Donloaded at: " + filepath
+}
+
+func (a *App) DownloadAudio(url string, filename string) string {
+	client := youtube.Client{}
+
+	video, err := client.GetVideo(url)
+	if err != nil {
+		return "Couldnt get video"
+	}
+
+	formats := video.Formats.Type("audio") // only get videos with audio
+	stream, _, err := client.GetStream(video, &formats[0])
+	if err != nil {
+		return "Error getting stream"
+	}
+	defer stream.Close()
+
+	basepath, err := os.UserHomeDir()
+	if err != nil {
+		return "Couldnt get home directory"
+	}
+
+	filepath := filepath.Join(basepath, "Downloads", filename+".mp3")
+
+	file, err := os.Create(filepath)
+	if err != nil {
+		return "Failed to create file"
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, stream)
+	if err != nil {
+		return "Failed to copy to file"
+	}
+
+	return "Donloaded at: " + filepath
 }

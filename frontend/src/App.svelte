@@ -1,12 +1,14 @@
 <script lang="ts">
     import Select from './components/select.svelte';
     import type { Readable } from 'svelte/store';
-    import { DownloadVideo, Greet } from "../wailsjs/go/main/App.js"
+    import { DownloadAudio, DownloadVideo } from "../wailsjs/go/main/App.js"
 
-    let url: string;
+    let url = "";
+    let filename = ""
     let format = "video";
     let downloading = false;
     let quality: Readable<string>;
+    let response: string = ""; 
 
     const qualitys = [
         "Default",
@@ -18,14 +20,32 @@
         "144p"
     ];
 
+    // temp out of use
     function download() {
-        downloading = true;
-        if ($quality === "Default") {
-            DownloadVideo(url).then(() => downloading = false);
+        if ($quality === "Default" || $quality === "") {
+            downloading = true;
+            DownloadVideo(url, filename).then((res) => {
+                response = res;
+                downloading = false;
+            });
         }
     }
 
-    
+    function simpleDownload() {
+        if (format === "video") {
+            downloading = true;
+            DownloadVideo(url, filename).then((res) => {
+                response = res;
+                downloading = false;
+            });
+        } else if (format === "audio") {
+            downloading = true;
+            DownloadAudio(url, filename).then((res) => {
+                response = res;
+                downloading = false;
+            });
+        }
+    }
 </script>
 
 <nav>
@@ -35,6 +55,11 @@
     <div class="input-group">
         <label class="label" for="url">URL</label>
         <input autocomplete="off" id="url" bind:value={url} class="input" placeholder="https://youtube.com"/>
+    </div>
+
+    <div class="input-group">
+        <label class="label" for="url">Filename</label>
+        <input autocomplete="off" id="url" bind:value={filename} class="input" placeholder="funny-video"/>
     </div>
     
     <div class="input-group">
@@ -51,11 +76,12 @@
         </div>
     </div>
 
-    <div class="input-group">
+    <!-- <div class="input-group">
         <Select items={qualitys} bind:selectedLabel={quality} />
-    </div>
+    </div> -->
     
-    <button class="button primary-button" on:click={() => Greet("Joar").then((greeting) => console.log(greeting))}>{ downloading ? `Downloading ${format}` : `Download ${format}` }</button>
+    <button class="button primary-button" on:click={simpleDownload}>{ downloading ? `Downloading ${format}` : `Download ${format}` }</button>
+    <p class="message">{ response }</p>
 </main>
 
 <style>
@@ -161,5 +187,10 @@
 
     input:checked + * {
         border-color: hsl(var(--primary));
+    }
+
+    .message {
+        font-size: .875rem;
+        font-weight: 300;
     }
 </style>
