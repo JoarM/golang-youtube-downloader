@@ -1,8 +1,9 @@
 <script lang="ts">
     export let items: any[];
+    
     import { createSelect, melt } from '@melt-ui/svelte';
 
-    const {
+    export let {
     elements: { trigger, menu, option, label },
     states: { selectedLabel, open, selected },
     helpers: { isSelected },
@@ -16,7 +17,6 @@
     });
 </script>
 
-<div class="input-group content-start">
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label class="label" use:melt={$label}>Quality</label>
     <button class="outline-button select-trigger"
@@ -55,6 +55,7 @@
         {#each items as item}
             <div
             use:melt={$option({ value: item, label: item })}
+            class="select-item"
             >
             <div class="{$isSelected(item) ? 'block' : 'hidden'}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path></svg>            </div>
@@ -63,7 +64,6 @@
         {/each}
     </div>
     {/if}
-</div>
 
 <style>
     .outline-button {

@@ -6,10 +6,6 @@ export function DownloadVideo(arg1) {
   return window['go']['main']['App']['DownloadVideo'](arg1);
 }
 
-export function GetVideoInfo(arg1) {
-  return window['go']['main']['App']['GetVideoInfo'](arg1);
-}
-
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }

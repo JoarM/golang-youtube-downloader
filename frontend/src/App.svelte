@@ -1,14 +1,15 @@
 <script lang="ts">
-    import {GetVideoInfo} from '../wailsjs/go/main/App.js'
-    import type { youtube } from 'wailsjs/go/models.js';
     import Select from './components/select.svelte';
+    import type { Readable } from 'svelte/store';
+    import { DownloadVideo, Greet } from "../wailsjs/go/main/App.js"
 
     let url: string;
     let format = "video";
-    let loadingInfo = false;
+    let downloading = false;
+    let quality: Readable<string>;
 
     const qualitys = [
-        "4k",
+        "Default",
         "1080p",
         "720p",
         "480p",
@@ -16,6 +17,15 @@
         "240p",
         "144p"
     ];
+
+    function download() {
+        downloading = true;
+        if ($quality === "Default") {
+            DownloadVideo(url).then(() => downloading = false);
+        }
+    }
+
+    
 </script>
 
 <nav>
@@ -41,9 +51,11 @@
         </div>
     </div>
 
-    <Select items={qualitys} />
+    <div class="input-group">
+        <Select items={qualitys} bind:selectedLabel={quality} />
+    </div>
     
-    <button class="button primary-button">{ loadingInfo ? `Downloading ${format}` : `Download ${format}` }</button>
+    <button class="button primary-button" on:click={() => Greet("Joar").then((greeting) => console.log(greeting))}>{ downloading ? `Downloading ${format}` : `Download ${format}` }</button>
 </main>
 
 <style>
@@ -112,10 +124,6 @@
         border: none;
         transition: background-color 150ms ease;
         cursor: pointer;
-    }
-
-    .button:disabled {
-        opacity: 50%;
     }
 
     .primary-button {

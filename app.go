@@ -45,7 +45,7 @@ func (a *App) DownloadVideo(url string) {
 	}
 	defer stream.Close()
 
-	file, err := os.Create("video.mp4")
+	file, err := os.Create("downloads/video.mp4")
 	if err != nil {
 		panic(err)
 	}
@@ -55,14 +55,4 @@ func (a *App) DownloadVideo(url string) {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func (a *App) GetVideoInfo(url string) youtube.FormatList {
-	client := youtube.Client{}
-
-	video, err := client.GetVideo(url)
-	if err != nil {
-		return nil
-	}
-	return video.Formats
 }
