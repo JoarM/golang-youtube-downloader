@@ -3,6 +3,7 @@
     import type { Readable } from 'svelte/store';
     import { DownloadAudio, DownloadByQuality, DownloadVideo } from "../wailsjs/go/main/App.js"
     import Tooltip from './components/ui/tooltip.svelte';
+    import Loader from './components/ui/loader.svelte';
 
     let url = "";
     let filename = ""
@@ -114,7 +115,14 @@
         </div>
     </div>
     
-    <button class="button primary-button mt-3" on:click={download}>{ downloading ? `Downloading ${format}` : `Download ${format}` }</button>
+    <button class="button primary-button mt-3" on:click={download}>
+        {#if downloading}
+            <Loader />
+        {/if}
+        <span>
+            { downloading ? `Downloading ${format}` : `Download ${format}` }
+        </span>
+    </button>
     <p class="message mt-1">{ response }</p>
 
     <span class="version">v 1.0</span>

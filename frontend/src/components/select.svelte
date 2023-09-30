@@ -24,7 +24,7 @@
 
         <Tooltip>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M128,20A108,108,0,1,0,236,128,108.12,108.12,0,0,0,128,20Zm0,192a84,84,0,1,1,84-84A84.09,84.09,0,0,1,128,212Zm-12-80V80a12,12,0,0,1,24,0v52a12,12,0,0,1-24,0Zm28,40a16,16,0,1,1-16-16A16,16,0,0,1,144,172Z"></path></svg>
-            <p slot="tooltip">Qualitys other than default require FFMPEG</p>
+            <p slot="tooltip">Qualitys other than default require FFMPEG, note that these downloads take longer do to re-encoding</p>
         </Tooltip>
     </div>
     

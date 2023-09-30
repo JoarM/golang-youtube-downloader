@@ -108,13 +108,13 @@ func (a *App) DownloadByQuality(url string, filename string, quality string) str
 		return "Couldnt find home directory"
 	}
 
-	audioFile, err, errString := DownloadTempAudio(url)
+	audioFile, errString, err := DownloadTempAudio(url)
 	if err != nil {
 		return errString
 	}
 	defer os.Remove(audioFile.Name())
 
-	videoFile, err, errString := DownloadTempVideo(quality, url)
+	videoFile, errString, err := DownloadTempVideo(quality, url)
 	if err != nil {
 		return errString
 	}
@@ -123,9 +123,8 @@ func (a *App) DownloadByQuality(url string, filename string, quality string) str
 	filepath := filepath.Join(basepath, "Downloads", filename+".mp4")
 
 	ffmpegVersionCmd := exec.Command("ffmpeg", "-y",
-		"-i", videoFile.Name(),
 		"-i", audioFile.Name(),
-		"-c", "copy", // Just copy without re-encoding
+		"-i", videoFile.Name(),
 		"-shortest", // Finish encoding when the shortest input stream ends
 		filepath,
 		"-loglevel", "warning",
@@ -141,58 +140,58 @@ func (a *App) DownloadByQuality(url string, filename string, quality string) str
 	return "Downloaded at: " + filepath
 }
 
-func DownloadTempAudio(url string) (*os.File, error, string) {
+func DownloadTempAudio(url string) (*os.File, string, error) {
 	youtube := youtube.Client{}
 	video, err := youtube.GetVideo(url)
 	if err != nil {
-		return nil, err, "Failed to get audio"
+		return nil, "Failed to get audio", err
 	}
 
 	formats := video.Formats.Type("audio")
 	stream, _, err := youtube.GetStream(video, &formats[0])
 	if err != nil {
-		return nil, err, "Failed to get audio stream"
+		return nil, "Failed to get audio stream", err
 	}
 	defer stream.Close()
 
 	file, err := os.CreateTemp("", "youtube.mp3")
 	if err != nil {
-		return nil, err, "Failed to create audio file"
+		return nil, "Failed to create audio file", err
 	}
 
 	_, err = io.Copy(file, stream)
 	if err != nil {
-		return nil, err, "Failed to copy audio to file"
+		return nil, "Failed to copy audio to file", err
 	}
 
-	return file, nil, ""
+	return file, "", nil
 }
 
-func DownloadTempVideo(quality string, url string) (*os.File, error, string) {
+func DownloadTempVideo(quality string, url string) (*os.File, string, error) {
 	youtube := youtube.Client{}
 	video, err := youtube.GetVideo(url)
 	if err != nil {
-		return nil, err, "Failed to get video"
+		return nil, "Failed to get video", err
 	}
 
 	format := video.Formats.FindByQuality(quality)
 	stream, _, err := youtube.GetStream(video, format)
 	if err != nil {
-		return nil, err, "Failed to get video stream"
+		return nil, "Failed to get video stream", err
 	}
 	defer stream.Close()
 
 	file, err := os.CreateTemp("", "youtube.mp4")
 	if err != nil {
-		return nil, err, "Failed to create video file"
+		return nil, "Failed to create video file", err
 	}
 
 	_, err = io.Copy(file, stream)
 	if err != nil {
-		return nil, err, "Failed to copy video to file"
+		return nil, "Failed to copy video to file", err
 	}
 
-	return file, nil, ""
+	return file, "", err
 }
 
 func checkFFMPEG() error {
