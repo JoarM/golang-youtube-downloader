@@ -2,6 +2,7 @@
     export let items: any[];
     
     import { createSelect, melt } from '@melt-ui/svelte';
+    import Tooltip from './ui/tooltip.svelte';
 
     export let {
     elements: { trigger, menu, option, label },
@@ -18,7 +19,15 @@
 </script>
 
     <!-- svelte-ignore a11y-label-has-associated-control -->
-    <label class="label" use:melt={$label}>Quality</label>
+    <div class="label-group">
+        <label class="label" use:melt={$label}>Quality</label>
+
+        <Tooltip>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M128,20A108,108,0,1,0,236,128,108.12,108.12,0,0,0,128,20Zm0,192a84,84,0,1,1,84-84A84.09,84.09,0,0,1,128,212Zm-12-80V80a12,12,0,0,1,24,0v52a12,12,0,0,1-24,0Zm28,40a16,16,0,1,1-16-16A16,16,0,0,1,144,172Z"></path></svg>
+            <p slot="tooltip">Qualitys other than default require FFMPEG</p>
+        </Tooltip>
+    </div>
+    
     <button class="outline-button select-trigger"
     use:melt={$trigger}
     on:m-keydown={(e) => {
@@ -151,5 +160,12 @@
         font-size: .875rem;
         line-height: 1;
         font-weight: 500;
+    }
+
+    .label-group {
+        display: flex;
+        gap: .25rem;
+        align-items: center;
+        justify-content: start;
     }
 </style>

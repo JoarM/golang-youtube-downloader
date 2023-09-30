@@ -19,7 +19,7 @@ func main() {
 	err := wails.Run(&options.App{
 		Title:  "Youtube downloader",
 		Width:  400,
-		Height: 500,
+		Height: 550,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
