@@ -57,8 +57,9 @@
             use:melt={$option({ value: item, label: item })}
             class="select-item"
             >
-            <div class="{$isSelected(item) ? 'block' : 'hidden'}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path></svg>            </div>
+                <span class="{$isSelected(item) ? 'block' : 'hidden'} select-check">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path></svg>            
+                </span>
             {item}
             </div>
         {/each}
@@ -72,16 +73,12 @@
         color: inherit;
     }
 
-    .outline-button:hover {
-        background-color: hsl(var(--accent));
-    }
-
     .block {
-        display: block;
+        opacity: 100;
     }
 
     .hidden {
-        display: none;
+        opacity: 0;
     }
 
     .ml-2 {
@@ -106,6 +103,11 @@
         transition: background-color 150ms ease;
         cursor: pointer;
         width: 11.25rem;
+        outline: none;
+    }
+
+    .select-trigger:focus-visible {
+        border: 1px solid hsl(var(--primary-foreground));
     }
 
     .select-content {
@@ -115,9 +117,39 @@
         padding: .25rem;
     }
 
-    .input-group {
-        display: grid;
+    .select-item {
+        padding: .25rem;
+        padding-left: 2rem;
+        padding-right: .5rem;
+        font-size: .875rem;
+        line-height: 1.25rem;
+        cursor: default;
+        border-radius: 4.8px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
         gap: .5rem;
-        width: 100%;
+        position: relative;
+    }
+
+    .select-item:hover {
+        background-color: hsl(var(--secondary));
+        color: hsl(var(--secondary-foreground));
+    }
+
+    .select-check {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: .5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .label {
+        font-size: .875rem;
+        line-height: 1;
+        font-weight: 500;
     }
 </style>

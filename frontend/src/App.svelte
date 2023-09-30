@@ -1,7 +1,7 @@
 <script lang="ts">
     import Select from './components/select.svelte';
     import type { Readable } from 'svelte/store';
-    import { DownloadAudio, DownloadVideo } from "../wailsjs/go/main/App.js"
+    import { DownloadAudio, DownloadByQuality, DownloadVideo } from "../wailsjs/go/main/App.js"
 
     let url = "";
     let filename = ""
@@ -20,31 +20,44 @@
         "144p"
     ];
 
-    // temp out of use
     function download() {
-        if ($quality === "Default" || $quality === "") {
-            downloading = true;
-            DownloadVideo(url, filename).then((res) => {
-                response = res;
-                downloading = false;
-            });
+        if (format === "audio") {
+            downloadAudio();
+            return;
         }
+
+        if ($quality === "Default" || $quality === "") {
+            downloadVideo();
+            return;
+        }
+        downloadByQuality();
     }
 
-    function simpleDownload() {
-        if (format === "video") {
-            downloading = true;
-            DownloadVideo(url, filename).then((res) => {
-                response = res;
-                downloading = false;
-            });
-        } else if (format === "audio") {
-            downloading = true;
-            DownloadAudio(url, filename).then((res) => {
-                response = res;
-                downloading = false;
-            });
-        }
+    function downloadVideo() {
+        downloading = true;
+        DownloadVideo(url, filename)
+        .then((res) => {
+            response = res;
+            downloading = false;
+        });
+    }
+
+    function downloadAudio() {
+        downloading = true;
+        DownloadAudio(url, filename)
+        .then((res) => {
+            response = res;
+            downloading = false;
+        });
+    }
+
+    function downloadByQuality() {
+        downloading = true;
+        DownloadByQuality(url, filename, $quality)
+        .then((res) => {
+            response = res;
+            downloading = false;
+        });
     }
 </script>
 
@@ -57,12 +70,12 @@
         <input autocomplete="off" id="url" bind:value={url} class="input" placeholder="https://youtube.com"/>
     </div>
 
-    <div class="input-group">
+    <div class="input-group mt-3">
         <label class="label" for="url">Filename</label>
         <input autocomplete="off" id="url" bind:value={filename} class="input" placeholder="funny-video"/>
     </div>
     
-    <div class="input-group">
+    <div class="input-group mt-3">
         <span class="label">Format</span>
         <div class="radio-group">
             <span>
@@ -76,12 +89,15 @@
         </div>
     </div>
 
-    <!-- <div class="input-group">
-        <Select items={qualitys} bind:selectedLabel={quality} />
-    </div> -->
+    <div class="qualitys" aria-expanded={format === "video" ? "true" : "false"}>
+        <div class="input-group">
+            <Select items={qualitys} bind:selectedLabel={quality} />
+        </div>
+    </div>
     
-    <button class="button primary-button" on:click={simpleDownload}>{ downloading ? `Downloading ${format}` : `Download ${format}` }</button>
-    <p class="message">{ response }</p>
+    
+    <button class="button primary-button mt-3" on:click={download}>{ downloading ? `Downloading ${format}` : `Download ${format}` }</button>
+    <p class="message mt-3">{ response }</p>
 </main>
 
 <style>
@@ -104,7 +120,6 @@
         margin-inline: auto;
         padding-inline: 1rem;
         margin-top: 1.5rem;
-        gap: .75rem
     }
 
     .label {
@@ -129,6 +144,7 @@
         display: grid;
         gap: .5rem;
         width: 100%;
+        overflow: hidden;
     }
 
     .radio-group {
@@ -183,6 +199,11 @@
         display: flex;
         background-color: inherit;
         color: inherit;
+        outline: none;
+    }
+
+    .input:focus-visible {
+        border: 1px solid hsl(var(--primary-foreground));
     }
 
     input:checked + * {
@@ -192,5 +213,23 @@
     .message {
         font-size: .875rem;
         font-weight: 300;
+    }
+
+    .qualitys {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 150ms ease;
+        overflow: hidden;
+        visibility: collapse;
+    }
+
+    .qualitys[aria-expanded="true"] {
+        grid-template-rows: 1fr;
+        visibility: visible;
+        margin-top: .75rem;
+    }
+
+    .mt-3 {
+        margin-top: .75rem;
     }
 </style>

@@ -6,10 +6,10 @@ export function DownloadAudio(arg1, arg2) {
   return window['go']['main']['App']['DownloadAudio'](arg1, arg2);
 }
 
-export function DownloadVideo(arg1, arg2) {
-  return window['go']['main']['App']['DownloadVideo'](arg1, arg2);
+export function DownloadByQuality(arg1, arg2, arg3) {
+  return window['go']['main']['App']['DownloadByQuality'](arg1, arg2, arg3);
 }
 
-export function Greet(arg1) {
-  return window['go']['main']['App']['Greet'](arg1);
+export function DownloadVideo(arg1, arg2) {
+  return window['go']['main']['App']['DownloadVideo'](arg1, arg2);
 }
