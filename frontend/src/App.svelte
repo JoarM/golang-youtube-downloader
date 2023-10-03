@@ -23,6 +23,10 @@
     ];
 
     function download() {
+        if (!parse()) {
+            return;
+        }
+        
         if (format === "audio") {
             downloadAudio();
             return;
@@ -60,6 +64,20 @@
             response = res;
             downloading = false;
         });
+    }
+
+    function parse(): boolean {
+        if (url.trim() === "") {
+            response = "Please enter a youtube link";
+            return false;
+        } 
+
+        if (filename.trim() === "") {
+            response = "Please enter a filename";
+            return false;
+        }
+
+        return true;
     }
 </script>
 
