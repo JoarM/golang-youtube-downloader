@@ -1,5 +1,6 @@
 <script lang="ts">
-    import VideoDownloader from "./components/videoDownloader.svelte";
+    import PlaylistDownloader from "./components/playlistDownloader.svelte";
+import VideoDownloader from "./components/videoDownloader.svelte";
 
     let page: "video" | "playlist" = "video";
 </script>
@@ -7,8 +8,8 @@
 <nav>
     <h1>YT downloader</h1>
     <div>
-        <button on:click={() => page = "video"}>Video</button>
-        <button on:click={() => page = "playlist"}>Playlist</button>
+        <button on:click={() => page = "video"} aria-current="{page === "video" ? "true" : "false"}">Video</button>
+        <button on:click={() => page = "playlist"} aria-current="{page === "playlist" ? "true" : "false"}">Playlist</button>
     </div>
 </nav>
 
@@ -16,9 +17,11 @@
     {#if page === "video"}
         <VideoDownloader />
     {:else}
-        <p>Playlist</p>
+        <PlaylistDownloader />
     {/if}
 </main>
+
+<span class="version">v 1.0</span>
 
 <style>
     nav {
@@ -45,5 +48,51 @@
         margin-inline: auto;
         padding-inline: 1rem;
         margin-top: 1.5rem;
+    }
+
+    div {
+        border-radius: 4.8px;
+        border: 1px solid hsl(var(--border));
+        padding: .25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .25rem;
+    }
+
+    button {
+        display: inline-flex;
+        height: 2.25rem;
+        padding: 0 .75rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4.8px;
+        font-size: .875rem;
+        line-height: 1.25rem;
+        font-weight: 500;
+        font-family: inherit;
+        border: none;
+        transition: background-color 150ms ease;
+        cursor: pointer;
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+    }
+
+    button[aria-current="true"] {
+        background-color: hsl(var(--accent));
+        color: hsl(var(--accent-foreground));
+    }
+
+    button:hover {
+        background-color: hsl(var(--secondary));
+        color: hsl(var(--secondary-foreground));
+    }
+
+    .version {
+        position: absolute;
+        bottom: .5rem;
+        right: .5rem;
+        font-size: .75rem;
+        font-weight: 300;
     }
 </style>

@@ -201,3 +201,12 @@ func checkFFMPEG() error {
 
 	return nil
 }
+
+func (a *App) GetPlaylist(url string) *youtube.Playlist {
+	client := youtube.Client{}
+	playlist, err := client.GetPlaylist(url)
+	if err != nil {
+		return nil
+	}
+	return playlist
+}

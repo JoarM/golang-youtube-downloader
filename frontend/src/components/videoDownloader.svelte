@@ -137,102 +137,7 @@
 </button>
 <p class="message mt-1">{ response }</p>
 
-<span class="version">v 1.0</span>
-
 <style>
-    .label {
-        font-size: .875rem;
-        line-height: 1;
-        font-weight: 500;
-    }
-
-    .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
-    }
-
-    .input-group {
-        display: grid;
-        gap: .5rem;
-        width: 100%;
-        overflow: hidden;
-    }
-
-    .radio-group {
-        display: flex;
-        gap: .5rem;
-    }
-
-    .button {
-        display: inline-flex;
-        height: 2.5rem;
-        padding: 0 1rem;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4.8px;
-        font-size: .875rem;
-        line-height: 1.25rem;
-        font-weight: 500;
-        font-family: inherit;
-        border: none;
-        transition: background-color 150ms ease;
-        cursor: pointer;
-    }
-
-    .primary-button {
-        background-color: hsl(var(--primary));
-        color: hsl(var(--primary-foreground));
-    }
-
-    .primary-button:hover {
-        background-color: hsl(var(--primary) / .9);
-    }
-
-    .outline-button {
-        border: 1px solid hsl(var(--input)); 
-        background-color: inherit;
-        color: inherit;
-    }
-
-    .outline-button:hover {
-        background-color: hsl(var(--accent));
-    }
-
-    .input {
-        width: 100%;
-        height: 2.5rem;
-        font-size: .875rem;
-        line-height: 1.25rem;
-        padding-block: .5rem;
-        padding-inline: .75rem;
-        border: 1px solid hsl(var(--input));
-        border-radius: 4.8px;
-        display: flex;
-        background-color: inherit;
-        color: inherit;
-        outline: none;
-    }
-
-    .input:focus-visible {
-        border: 1px solid hsl(var(--primary-foreground));
-    }
-
-    input:checked + * {
-        border-color: hsl(var(--primary));
-    }
-
-    .message {
-        font-size: .875rem;
-        font-weight: 300;
-    }
-
     .qualitys {
         display: grid;
         grid-template-rows: 0fr;
@@ -245,28 +150,5 @@
         grid-template-rows: 1fr;
         visibility: visible;
         margin-top: .75rem;
-    }
-
-    .mt-3 {
-        margin-top: .75rem;
-    }
-
-    .mt-1 {
-        margin-top: .25rem;
-    }
-
-    .version {
-        position: absolute;
-        bottom: .5rem;
-        right: .5rem;
-        font-size: .75rem;
-        font-weight: 300;
-    }
-
-    .label-group {
-        display: flex;
-        gap: .25rem;
-        align-items: center;
-        justify-content: start;
     }
 </style>
