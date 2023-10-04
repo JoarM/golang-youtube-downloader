@@ -7,7 +7,7 @@
 
     let url = "";
     let filename = ""
-    let format = "video";
+    let format: "video" | "audio" = "video";
     let downloading = false;
     let quality: Readable<string>;
     let response: string = ""; 

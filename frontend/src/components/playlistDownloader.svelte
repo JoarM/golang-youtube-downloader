@@ -1,13 +1,22 @@
 <script lang="ts">
     import { GetPlaylist } from "../../wailsjs/go/main/App.js";
+    import Loader from "./ui/loader.svelte";
 
     let playlist: any;
     let url = "";
+    let folder = "";
+    let format: "video" | "audio" = "video";
+    let getting = false;
+    let downloading = false;
 
     function getPlaylist() {
         if (url.trim() === "") return;
+        getting = true;
         GetPlaylist(url)
-        .then((value) => playlist = value);
+        .then((value) => {
+            playlist = value;
+            getting = false;
+        });
     }
 </script>
 
@@ -16,10 +25,45 @@
     <input name="url" id="url" class="input" type="text" bind:value={url} placeholder="https://youtube.com/playlist">
 </div>
 
-<button class="button primary-button mt-3" on:click={getPlaylist}>Get playlist</button>
+<button class="button primary-button mt-3" on:click={getPlaylist}>
+    {#if getting}
+        <Loader />
+    {/if}
+    <span>
+        { getting ? "Getting playlist" : "Get playlist" }
+    </span>
+</button>
 
 {#if playlist}
     <h2 class="mt-3">{ playlist.Title }</h2>
+
+    <div class="input-group mt-3">
+        <label for="folder" class="label">Folder name</label>
+        <input type="text" class="input" id="folder" name="folder" bind:value={folder}>
+    </div>
+
+    <div class="input-group mt-3">
+        <span class="label">Format</span>
+        <div class="radio-group">
+            <span>
+                <input type="radio" id="video" name="format" value="video" class="sr-only" bind:group={format}>
+                <label for="video" class="button outline-button">Video</label>
+            </span>
+            <span>
+                <input type="radio" id="audio" name="format" value="audio" class="sr-only" bind:group={format}>
+                <label for="audio" class="button outline-button">Audio</label>
+            </span>
+        </div>
+    </div>
+
+    <button class="button primary-button mt-3">
+        {#if downloading}
+            <Loader />
+        {/if}
+        <span>
+            { downloading ? "Downloading" : "Download all" }
+        </span>
+    </button>
 
     <ul>
         {#each playlist.Videos as video}
