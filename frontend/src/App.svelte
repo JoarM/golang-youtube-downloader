@@ -1,6 +1,6 @@
 <script lang="ts">
     import PlaylistDownloader from "./components/playlistDownloader.svelte";
-import VideoDownloader from "./components/videoDownloader.svelte";
+    import VideoDownloader from "./components/videoDownloader.svelte";
 
     let page: "video" | "playlist" = "video";
 </script>
@@ -44,7 +44,7 @@ import VideoDownloader from "./components/videoDownloader.svelte";
         flex-direction: column;
         align-items: start;
         justify-content: start;
-        max-width: 376px;
+        max-width: 520px;
         margin-inline: auto;
         padding-inline: 1rem;
         margin-top: 1.5rem;
@@ -89,7 +89,7 @@ import VideoDownloader from "./components/videoDownloader.svelte";
     }
 
     .version {
-        position: absolute;
+        position: fixed;
         bottom: .5rem;
         right: .5rem;
         font-size: .75rem;

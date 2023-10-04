@@ -20,6 +20,18 @@
 
 {#if playlist}
     <h2 class="mt-3">{ playlist.Title }</h2>
+
+    <ul>
+        {#each playlist.Videos as video}
+            <li>
+                <img src={video.Thumbnails[1].URL} alt="">
+                <div class="video-group">
+                    <h3>{ video.Title }</h3>
+                    <button class="button-sm outline-button">Download</button>
+                </div>
+            </li>
+        {/each}
+    </ul>
 {/if}
 
 <style>
@@ -30,5 +42,46 @@
         font-weight: 500;
         border-bottom: 1px solid hsl(var(--border));
         padding-bottom: .5rem;
+        width: 100%;
+    }
+
+    ul {
+        margin-block: 1rem;
+        display: grid;
+        gap: .5rem;
+        list-style: none;
+    }
+
+    li {
+        display: flex;
+        align-items: start;
+        justify-content: start;
+        gap: .5rem;
+    }
+
+    img {
+        width: 10rem;
+        height: 5.625rem;
+        border-radius: 4.8px;
+        object-fit: cover;
+    }
+
+    .video-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        flex-direction: column;
+        height: 5.625rem;
+    }
+
+    h3 {
+        font-size: .875rem;
+        line-height: 1.25rem;
+        letter-spacing: 0em;
+        font-weight: 500;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
     }
 </style>
