@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { GetPlaylist } from "../../wailsjs/go/main/App.js";
+    import { CreateDir, GetPlaylist } from "../../wailsjs/go/main/App.js";
     import Loader from "./ui/loader.svelte";
 
     let playlist: any;
@@ -8,15 +8,34 @@
     let format: "video" | "audio" = "video";
     let getting = false;
     let downloading = false;
+    let message = "";
 
     function getPlaylist() {
         if (url.trim() === "") return;
+        if (downloading) return;
         getting = true;
         GetPlaylist(url)
         .then((value) => {
             playlist = value;
             getting = false;
         });
+    }
+
+    async function downloadPlaylist() {
+        if (!playlist) return;
+        if (getting) return;
+        downloading = true;
+        let res = await CreateDir(folder);
+        if (res != "") {
+            message = res; 
+            downloading = false;
+            return;
+        }
+        if (format === "video") {
+            downloading = false;
+        } else {
+
+        }
     }
 </script>
 
@@ -56,7 +75,7 @@
         </div>
     </div>
 
-    <button class="button primary-button mt-3">
+    <button class="button primary-button mt-3" on:click={downloadPlaylist}>
         {#if downloading}
             <Loader />
         {/if}
@@ -65,6 +84,8 @@
         </span>
     </button>
 
+    <p class="message mt-1">{ message }</p>
+ 
     <ul>
         {#each playlist.Videos as video}
             <li>
