@@ -1,16 +1,11 @@
 <script lang="ts">
     import Select from './select.svelte';
     import type { Readable } from 'svelte/store';
-    import { DownloadAudio, DownloadByQuality, DownloadVideo } from "../../wailsjs/go/main/App.js"
     import Tooltip from './ui/tooltip.svelte';
     import Loader from './ui/loader.svelte';
+    import { video, download } from '../lib/state';
 
-    let url = "";
-    let filename = ""
-    let format: "video" | "audio" = "video";
-    let downloading = false;
     let quality: Readable<string>;
-    let response: string = ""; 
 
     const qualitys = [
         "Default",
@@ -21,62 +16,6 @@
         "240p",
         "144p"
     ];
-
-    function download() {
-        if (!parse()) {
-            return;
-        }
-        
-        if (format === "audio") {
-            downloadAudio();
-            return;
-        }
-
-        if ($quality === "Default" || $quality === "") {
-            downloadVideo();
-            return;
-        }
-        downloadByQuality();
-    }
-
-    function downloadVideo() {
-        downloading = true;
-        DownloadVideo(url, filename)
-        .then((res) => {
-            response = res;
-            downloading = false;
-        });
-    }
-
-    function downloadAudio() {
-        downloading = true;
-        DownloadAudio(url, filename)
-        .then((res) => {
-            response = res;
-            downloading = false;
-        });
-    }
-
-    function downloadByQuality() {
-        downloading = true;
-        DownloadByQuality(url, filename, $quality)
-        .then((res) => {
-            response = res;
-            downloading = false;
-        });
-    }
-
-    function parse(): boolean {
-        if (url.trim() === "") {
-            response = "Please enter a youtube link";
-            return false;
-        } 
-        if (filename.trim() === "") {
-            response = "Please enter a filename";
-            return false;
-        }
-        return true;
-    }
 </script>
 
 <div class="input-group">
@@ -90,7 +29,7 @@
         </Tooltip>
     </div>
     
-    <input autocomplete="off" id="url" bind:value={url} class="input" placeholder="https://youtube.com"/>
+    <input autocomplete="off" id="url" bind:value={$video.url} class="input" placeholder="https://youtube.com"/>
 </div>
 
 <div class="input-group mt-3">
@@ -104,38 +43,38 @@
         </Tooltip>
     </div>
     
-    <input autocomplete="off" id="url" bind:value={filename} class="input" placeholder="funny-video"/>
+    <input autocomplete="off" id="url" bind:value={$video.filename} class="input" placeholder="funny-video"/>
 </div>
 
 <div class="input-group mt-3">
     <span class="label">Format</span>
     <div class="radio-group">
         <span>
-            <input type="radio" id="video" name="format" value="video" class="sr-only" bind:group={format}>
+            <input type="radio" id="video" name="format" value="video" class="sr-only" bind:group={$video.format}>
             <label for="video" class="button outline-button">Video</label>
         </span>
         <span>
-            <input type="radio" id="audio" name="format" value="audio" class="sr-only" bind:group={format}>
+            <input type="radio" id="audio" name="format" value="audio" class="sr-only" bind:group={$video.format}>
             <label for="audio" class="button outline-button">Audio</label>
         </span>
     </div>
 </div>
 
-<div class="qualitys" aria-expanded={format === "video" ? "true" : "false"}>
+<div class="qualitys" aria-expanded={$video.format === "video" ? "true" : "false"}>
     <div class="input-group">
         <Select items={qualitys} bind:selectedLabel={quality} />
     </div>
 </div>
 
-<button class="button primary-button mt-3" on:click={download}>
-    {#if downloading}
+<button class="button primary-button mt-3" aria-disabled={$video.downloading} on:click={() => download($video.url, $video.filename, $video.format, $quality)}>
+    {#if $video.downloading}
         <Loader />
     {/if}
     <span>
-        { downloading ? `Downloading ${format}` : `Download ${format}` }
+        { $video.downloading ? `Downloading ${$video.format}` : `Download ${$video.format}` }
     </span>
 </button>
-<p class="message mt-1">{ response }</p>
+<p class="message mt-1">{ $video.status }</p>
 
 <style>
     .qualitys {

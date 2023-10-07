@@ -1,20 +1,19 @@
 <script lang="ts">
     import PlaylistDownloader from "./components/playlistDownloader.svelte";
     import VideoDownloader from "./components/videoDownloader.svelte";
-
-    let page: "video" | "playlist" = "video";
+    import { page } from "./lib/state";
 </script>
 
 <nav>
     <h1>YT downloader</h1>
     <div>
-        <button on:click={() => page = "video"} aria-current="{page === "video" ? "true" : "false"}">Video</button>
-        <button on:click={() => page = "playlist"} aria-current="{page === "playlist" ? "true" : "false"}">Playlist</button>
+        <button on:click={() => page.set("video")} aria-current="{$page === "video" ? "true" : "false"}">Video</button>
+        <button on:click={() => page.set("playlist")} aria-current="{$page === "playlist" ? "true" : "false"}">Playlist</button>
     </div>
 </nav>
 
 <main>
-    {#if page === "video"}
+    {#if $page === "video"}
         <VideoDownloader />
     {:else}
         <PlaylistDownloader />

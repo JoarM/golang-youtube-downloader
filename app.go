@@ -210,3 +210,18 @@ func (a *App) GetPlaylist(url string) *youtube.Playlist {
 	}
 	return playlist
 }
+
+func (a *App) CreateFolder(dir string) string {
+	basepath, err := os.UserHomeDir()
+	if err != nil {
+		return "Couldnt find home directory"
+	}
+
+	filepath := filepath.Join(basepath, "Downloads", dir)
+
+	err = os.MkdirAll(filepath, 0755)
+	if err != nil {
+		return "Failed to create directory"
+	}
+	return ""
+}
