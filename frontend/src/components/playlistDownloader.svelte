@@ -50,6 +50,8 @@
         </span>
     </button>
 
+    <p class="message mt-1">{ $playlist.status }</p>
+ 
     <ul>
         {#each $playlist.playlist.Videos as video}
             <li>
