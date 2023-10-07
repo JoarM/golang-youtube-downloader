@@ -20,7 +20,7 @@
     {/if}
 </main>
 
-<span class="version">v 1.0</span>
+<span class="version">v 2.0</span>
 
 <style>
     nav {
